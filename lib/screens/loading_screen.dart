@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:geolocator/geolocator.dart';
 import '../services/location.dart';
 import 'package:http/http.dart';
@@ -28,7 +29,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
     //https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=YOUR_API_KEY
 
     Response response = await get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=YOUR_API_KEY'));
+        'https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=${dotenv.env['API_KEY']}')); //dotenv
+
     print(response.statusCode);
   }
 
@@ -41,6 +43,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           onPressed: () {
             //Get the current location
             // getLocation();
+            getData();
           },
           child: const Text('Get Location'),
         ),
