@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/loading_screen.dart';
 import '../utilities/constansts.dart';
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen({super.key});
+  const LocationScreen({super.key, this.locationWaether});
+  final dynamic locationWaether;
+  // static const routeName = '/location-screen';
 
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  // @override
+  // void initState() {
+  //   // TODOimplement initState
+  //   super.initState();
+  //   updateUI();
+  // }
+
+  void updateUI() {
+    var temperature = widget.locationWaether['main']['temp'];
+    var condition = widget.locationWaether['weather'][0]['id'];
+    var cityName = widget.locationWaether['name'];
+    print(temperature);
+    print(condition);
+    print(cityName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

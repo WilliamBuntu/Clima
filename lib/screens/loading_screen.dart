@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:geolocator/geolocator.dart';
 import '../services/location.dart';
-import 'package:http/http.dart';
+import '../services/networking.dart';
+import 'location_screen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -12,42 +13,41 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  late double latitude;
+  late double longitude;
   @override
   void initState() {
     super.initState();
-    getLocation();
+    getLocationData();
   }
 
-  void getLocation() async {
+  void getLocationData() async {
     Location location = Location();
     await location.getCurrentLocation();
-    print(location.latitude);
-    print(location.longitude);
+    latitude = location.latitude;
+    longitude = location.longitude;
+
+    NetworkHelper networkHelper = NetworkHelper(
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=${dotenv.env['API_KEY']}');
+    var weatherData = networkHelper.getData();
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return LocationScreen(locationWaether: weatherData,);
+    }));
   }
 
-  void getData() async {
-    //https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=YOUR_API_KEY
-
-    Response response = await get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=${dotenv.env['API_KEY']}')); //dotenv
-
-    print(response.statusCode);
-  }
+  // var condtion = jsonDecode(data)['weather'][0]['id'];
+  // var temperature = jsonDecode(data)['main']['temp'];
+  // var cityName = jsonDecode(data)['name'];
 
   @override
   Widget build(BuildContext context) {
-    getData();
-    return Scaffold(
+    // getData();
+    return const Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            //Get the current location
-            // getLocation();
-            getData();
-          },
-          child: const Text('Get Location'),
-        ),
-      ),
+          child: SpinKitSpinningLines(
+        color: Colors.white70,
+        size: 100.0,
+      )),
     );
   }
 }
