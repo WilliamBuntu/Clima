@@ -1,7 +1,6 @@
-
 import 'package:geolocator/geolocator.dart';
-class Location {
 
+class Location {
   late double latitude;
   late double longitude;
 
@@ -14,7 +13,5 @@ class Location {
     } catch (e) {
       throw "Cant access the location";
     }
-
-    
   }
 }

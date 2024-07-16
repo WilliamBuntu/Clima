@@ -28,11 +28,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
     longitude = location.longitude;
 
     NetworkHelper networkHelper = NetworkHelper(
-        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=${dotenv.env['API_KEY']}');
-    var weatherData = networkHelper.getData();
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LocationScreen(locationWaether: weatherData,);
-    }));
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=${dotenv.env['API_KEY']}&units=metric');
+    var weatherData = await networkHelper.getData();
+
+    BuildContext? currentContext = context; // Store the context locally
+
+    if (mounted) {
+      Navigator.push(currentContext, MaterialPageRoute(builder: (context) {
+        return LocationScreen(locationWaether: weatherData);
+      }));
+    }
   }
 
   // var condtion = jsonDecode(data)['weather'][0]['id'];
