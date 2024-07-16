@@ -4,6 +4,7 @@ import '../services/location.dart';
 import '../services/networking.dart';
 import 'location_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../services/weather.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -22,14 +23,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getLocationData() async {
-    Location location = Location();
-    await location.getCurrentLocation();
-    latitude = location.latitude;
-    longitude = location.longitude;
-
-    NetworkHelper networkHelper = NetworkHelper(
-        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=${dotenv.env['API_KEY']}&units=metric');
-    var weatherData = await networkHelper.getData();
+    WeatherModel weatherModel = WeatherModel();
+      var weatherData = await weatherModel.getCityWeather();
 
     BuildContext? currentContext = context; // Store the context locally
 
