@@ -3,6 +3,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../services/location.dart';
 import '../services/networking.dart';
   class WeatherModel {
+
+    Future<dynamic> getLocationWeather(String cityName) async {
+      var url =  'https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=${dotenv.env['API_KEY']}&units=metric';
+      NetworkHelper networkHelper =  NetworkHelper(url);
+     var weatherData = await networkHelper.getData();
+     return weatherData;
+    }
     
     Future<dynamic> getCityWeather() async {
        Location location = Location();
